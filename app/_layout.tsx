@@ -1,10 +1,11 @@
+import "react-native-reanimated";
+import "../global.css";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import "react-native-reanimated";
-import Home from "./(home)";
-import "../global.css";
+import { Feather } from "@expo/vector-icons";
+import { Sprout } from "lucide-react-native";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -24,5 +25,28 @@ export default function RootLayout() {
     return null;
   }
 
-  return <Home />;
+  return (
+    <Stack
+      initialRouteName="home"
+      screenOptions={{
+        headerTitleAlign: "center",
+        headerShadowVisible: false,
+        headerStyle: { backgroundColor: "#A5D4A9" },
+      }}
+    >
+      <Stack.Screen
+        name="index"
+        options={{
+          title: "Plantas Cadastradas",
+          headerRight() {
+            return <Feather name="menu" size={26} />;
+          },
+          headerLeft() {
+            return <Sprout color={"black"} size={26} />;
+          },
+        }}
+      />
+      <Stack.Screen name="detalhes" />
+    </Stack>
+  );
 }
