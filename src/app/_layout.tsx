@@ -51,6 +51,7 @@ export default function RootLayout() {
           }}
         />
         <Stack.Screen name="detalhes" />
+        <Stack.Screen name="mapa" options={{ headerShown: false }} />
       </Stack>
     </SQLiteProvider>
   );

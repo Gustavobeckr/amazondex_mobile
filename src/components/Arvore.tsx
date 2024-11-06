@@ -11,7 +11,7 @@ export default function Arvore({ data, ...rest }: Props) {
     <TouchableOpacity
       {...rest}
       onPress={() =>
-        router.push({ pathname: "/detalhes", params: { id: data.id } })
+        router.push({ pathname: "/detalhes", params: { id: data.nome } })
       }
       className="flex bg-verde-escuro rounded-xl p-5"
     >
