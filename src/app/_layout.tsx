@@ -4,9 +4,10 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { Sprout, Menu } from "lucide-react-native";
+import { Sprout } from "lucide-react-native";
 import { SQLiteProvider } from "expo-sqlite";
 import { initializaDatabase } from "@/database/initializeDatabase";
+import MenuButton from "@/components/MenuButton";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -43,7 +44,7 @@ export default function RootLayout() {
           options={{
             title: "Plantas Cadastradas",
             headerRight() {
-              return <Menu color={"black"} size={26} />;
+              return <MenuButton />;
             },
             headerLeft() {
               return <Sprout color={"black"} size={26} />;
