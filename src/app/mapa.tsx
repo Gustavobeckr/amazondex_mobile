@@ -1,7 +1,13 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import MapView, { Callout, Marker } from "react-native-maps";
 import { ArrowLeft } from "lucide-react-native";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import { useDatabase } from "@/hooks/useDatabase";
+import {
+  NavigationProps,
+  OcorrenciaNaturalDataBase,
+} from "@/types/arvore.types";
 
 type MapaProps = {
   listaCoordenada: Coordenada[];
@@ -9,12 +15,41 @@ type MapaProps = {
 };
 
 type Coordenada = {
-  latitude: number;
-  longitude: number;
+  latitude: string;
+  longitude: string;
 };
 
 export default function Mapa() {
   const router = useRouter();
+  const params = useLocalSearchParams<NavigationProps>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [ocorrenciaNatural, setOcorrenciaNatural] = useState<
+    OcorrenciaNaturalDataBase[]
+  >([]);
+  const { findOcorrenciaNatByArvoreId } = useDatabase();
+  async function buscarOcorrenciaNatural() {
+    try {
+      const buscaOcorrenciaNatural = await findOcorrenciaNatByArvoreId(
+        params.arvoreId as string
+      );
+      if (buscaOcorrenciaNatural) {
+        setOcorrenciaNatural(buscaOcorrenciaNatural);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      Alert.alert(
+        "Erro",
+        "Aconteceu um erro ao tentar buscar pela árvore selecionada: " +
+          params.nomeArvore +
+          " \n\n " +
+          error
+      );
+    }
+  }
+  useEffect(() => {
+    buscarOcorrenciaNatural();
+  }, []);
+
   return (
     <View style={styles.container}>
       <MapView
@@ -30,13 +65,23 @@ export default function Mapa() {
           altitude: 4,
         }}
       >
-        {/* <Marker coordinate={cordinate}>
-          <Callout>
-            <View className="p-3">
-              <Text className="text-lg font-semibold">Arvore 1</Text>
-            </View>
-          </Callout>
-        </Marker>*/}
+        {ocorrenciaNatural.map(({ latitude, longitude }, index) => {
+          return (
+            <Marker
+              key={index}
+              coordinate={{
+                latitude: parseFloat(latitude),
+                longitude: parseFloat(longitude),
+              }}
+            >
+              <Callout>
+                <View className="p-1">
+                  <Text className="text-md ">{params.nomeArvore}</Text>
+                </View>
+              </Callout>
+            </Marker>
+          );
+        })}
       </MapView>
       <TouchableOpacity
         onPress={() => router.back()}

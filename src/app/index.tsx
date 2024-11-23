@@ -1,47 +1,48 @@
-import Arvore from "@/components/Arvore";
-import { ArvoreDatabase, useDatabase } from "@/database/useDatabase";
-import { Link } from "expo-router";
-import { useEffect, useState } from "react";
-import { Button, FlatList, View } from "react-native";
+import ArvoreButton from "@/components/ArvoreButton";
+import useArvore from "@/hooks/useArvore";
+import { ArvoreDataBase } from "@/types/arvore.types";
+import { useCallback, useEffect, useState } from "react";
+import { FlatList, View, RefreshControl, Alert } from "react-native";
 
 export default function Home() {
-  const [arvores, setArvores] = useState<ArvoreDatabase[] | null>(null);
-  const { create, listAll } = useDatabase();
+  const [arvores, setArvores] = useState<ArvoreDataBase[] | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+  const { atualizarArvores } = useArvore();
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
 
   async function listarArvores() {
-    try {
-      const response = await listAll();
+    const response = await atualizarArvores();
+    if (response) {
       setArvores(response);
-    } catch (error) {
-      console.log(error);
+    } else {
+      Alert.alert(
+        "Erro",
+        "Aconteceu um erro ao tentar atualizar as árvores cadastradas"
+      );
     }
   }
 
   useEffect(() => {
     listarArvores();
-  }, []);
+  }, [refreshing]);
 
-  async function insert() {
-    try {
-      await create({ nome: "Arvore1" });
-      await create({ nome: "Arvore2" });
-      await create({ nome: "Arvore3" });
-      await create({ nome: "Arvore4" });
-      await create({ nome: "Arvore5" });
-    } catch (error) {
-      console.log(error);
-    }
-  }
   return (
     <View className="h-full w-full px-2 bg-verde-claro">
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         data={arvores}
         keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => <Arvore data={item} />}
+        renderItem={({ item }) => <ArvoreButton data={item} />}
         contentContainerStyle={{ gap: 8 }}
       />
-
-      {/* <Button title="insert" onPress={insert} /> */}
     </View>
   );
 }

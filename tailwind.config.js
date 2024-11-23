@@ -8,6 +8,8 @@ module.exports = {
       colors: {
         "verde-claro": "#A5D4A9",
         "verde-escuro": "#659455",
+        verde: "#C9F0BB",
+        "cinza-claro": "#D9D9D9",
       },
     },
   },

@@ -1,17 +1,22 @@
+import useArvore from "@/hooks/useArvore";
+import { router } from "expo-router";
 import { ListRestart } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, TouchableOpacity, View } from "react-native";
 
-export default function MenuButton() {
+export default function AtualizarArvoresButton() {
   const [isLoading, setIsLoading] = useState(false);
+  const { atualizarArvores } = useArvore();
 
-  useEffect(() => {
-    setTimeout(() => setIsLoading(false), 1000);
-  }, [isLoading]);
+  const buscarArvoresCadastradas = async () => {
+    setIsLoading(true);
+    await atualizarArvores();
+    setIsLoading(false);
+  };
 
   return (
     <View className="flex">
-      <TouchableOpacity onPress={() => setIsLoading(true)}>
+      <TouchableOpacity onPress={buscarArvoresCadastradas}>
         {isLoading ? (
           <ActivityIndicator className="color-black" size="large" />
         ) : (

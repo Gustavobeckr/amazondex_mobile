@@ -1,17 +1,21 @@
+import { ArvoreDataBase } from "@/types/arvore.types";
 import { useRouter } from "expo-router";
 import { Text, TouchableOpacity, TouchableOpacityProps } from "react-native";
 
 type Props = TouchableOpacityProps & {
-  data: { id: number; nome: string };
+  data: ArvoreDataBase;
 };
 
-export default function Arvore({ data, ...rest }: Props) {
+export default function ArvoreButton({ data, ...rest }: Props) {
   const router = useRouter();
   return (
     <TouchableOpacity
       {...rest}
       onPress={() =>
-        router.push({ pathname: "/detalhes", params: { id: data.nome } })
+        router.push({
+          pathname: "/arvore",
+          params: { nomeArvore: data.nome, arvoreId: data.id },
+        })
       }
       className="flex bg-verde-escuro rounded-xl p-5"
     >
