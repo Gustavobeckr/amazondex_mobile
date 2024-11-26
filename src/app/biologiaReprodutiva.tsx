@@ -57,7 +57,7 @@ export default function BiologiaReprodutiva() {
         ) : (
           <>
             <Text className="m-1 text-2xl font-semibold text-start bg-verde rounded-xl p-2">
-              {"Tipo: "} {bioRep!.tipo ? +bioRep!.tipo : "Não informada"}
+              {"Tipo: "} {bioRep!.tipo ? bioRep!.tipo : "Não informada"}
             </Text>
             <DetalhesView
               color={"bg-verde-claro"}
