@@ -10,7 +10,6 @@ export default function useArvore() {
     try {
       await deleteAll();
       const listaArvore = await buscarTodasArvores();
-      console.log(listaArvore);
       for (let i = 0; i < listaArvore.length; i++) {
         const arvore = listaArvore[i];
         await create(arvore);

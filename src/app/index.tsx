@@ -2,13 +2,19 @@ import ArvoreButton from "@/components/ArvoreButton";
 import useArvore from "@/hooks/useArvore";
 import { ArvoreDataBase } from "@/types/arvore.types";
 import { useCallback, useEffect, useState } from "react";
-import { FlatList, View, RefreshControl, Alert } from "react-native";
+import {
+  FlatList,
+  View,
+  RefreshControl,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 
 export default function Home() {
   const [arvores, setArvores] = useState<ArvoreDataBase[] | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const { atualizarArvores } = useArvore();
-
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
@@ -18,6 +24,7 @@ export default function Home() {
 
   async function listarArvores() {
     const response = await atualizarArvores();
+
     if (response) {
       setArvores(response);
     } else {
@@ -30,19 +37,24 @@ export default function Home() {
 
   useEffect(() => {
     listarArvores();
+    setIsLoading(false);
   }, [refreshing]);
 
   return (
     <View className="h-full w-full px-2 bg-verde-claro">
-      <FlatList
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        data={arvores}
-        keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => <ArvoreButton data={item} />}
-        contentContainerStyle={{ gap: 8 }}
-      />
+      {isLoading ? (
+        <ActivityIndicator className="color-black" size="large" />
+      ) : (
+        <FlatList
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          data={arvores}
+          keyExtractor={(item) => String(item.id)}
+          renderItem={({ item }) => <ArvoreButton data={item} />}
+          contentContainerStyle={{ gap: 8 }}
+        />
+      )}
     </View>
   );
 }

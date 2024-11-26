@@ -4,9 +4,7 @@ import { AxiosError } from "axios";
 
 export default async function buscarTodasArvores(): Promise<ArvoreDTO[]> {
   try {
-    console.log(process.env.EXPO_PUBLIC_BASE_URL);
     const response = await axiosRequest.get("arvore/list");
-
     return response.data.data;
   } catch (error) {
     const erro = error as AxiosError;
