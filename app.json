@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "amazondex-mobile",
-    "slug": "amazondex-mobile",
+    "name": "amazondex",
+    "slug": "amazondex",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.gustavorbecker.amazondex"
     },
     "web": {
       "bundler": "metro",
@@ -31,6 +32,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "7bf5193c-8db3-4cda-9a5c-d22f659cc653"
+      }
     }
   }
 }

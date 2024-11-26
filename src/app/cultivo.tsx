@@ -66,10 +66,11 @@ export default function Cultivo() {
                 html: cultivo!.descricao,
               }}
             />
-            {cultivo?.cuidadosEspeciais.map((cuidadoEspecial) => {
+            {cultivo?.cuidadosEspeciais.map((cuidadoEspecial, index) => {
               return (
                 <>
                   <Collapsible
+                    key={index}
                     color={"bg-verde"}
                     title={
                       "Cuidados com " +
