@@ -78,7 +78,7 @@ export default function Arvore() {
                 <Image
                   resizeMode="cover"
                   className="h-full"
-                  src="http://191.96.251.229:8080/arquivo/view/1"
+                  src={"http://191.96.251.229:8080/arquivo/view/" + fotoID}
                 />
               </View>
               <View className="flex flex-row items-center justify-end">

@@ -132,8 +132,6 @@ export function useDatabase() {
   function deleteAll() {
     try {
       const result = database.runSync("DELETE FROM arvore");
-      console.log(result);
-      console.log(result);
       return result;
     } catch (error) {
       throw error;
