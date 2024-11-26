@@ -20,9 +20,9 @@ import { useSQLiteContext } from "expo-sqlite";
 export function useDatabase() {
   const database = useSQLiteContext();
 
-  async function create(data: Omit<ArvoreDTO, "id">) {
+  function create(data: Omit<ArvoreDTO, "id">) {
     try {
-      const arvoreCommand = await database.runAsync(
+      const arvoreCommand = database.runSync(
         "INSERT INTO arvore (nome, descricao_botanica, aspectos_ecologicos, regeneracao_natural) VALUES (?, ?, ?, ?)",
         data.nome,
         data.descricaoBotanica,
@@ -31,7 +31,7 @@ export function useDatabase() {
       );
       const arvoreId = arvoreCommand.lastInsertRowId;
       data.ocorrenciaNatural.forEach(async ({ latitude, longitude }, index) => {
-        await database.runAsync(
+        database.runSync(
           "INSERT INTO ocorrencia_natural (latitude, longitude, arvore_id) VALUES (?, ?, ?)",
           latitude,
           longitude,
@@ -39,14 +39,14 @@ export function useDatabase() {
         );
       });
 
-      await database.runAsync(
+      database.runSync(
         "INSERT INTO biologia_reprodutiva (descricao, tipo, arvore_id) VALUES (?, ?, ?)",
         data.biologiaReprodutiva.descricao,
         data.biologiaReprodutiva.tipo,
         arvoreId
       );
 
-      await database.runAsync(
+      database.runSync(
         "INSERT INTO paisagismo (descricao, arvore_id) VALUES (?, ?)",
         data.paisagismo.descricao,
         arvoreId
@@ -54,39 +54,39 @@ export function useDatabase() {
 
       for (let i = 0; i < data.fotoArvore.length; i++) {
         const foto = data.fotoArvore[i];
-        await database.runAsync(
+        database.runSync(
           "INSERT INTO fotos_arvores (descricao, foto_id, arvore_id) VALUES (?, ?, ?)",
           foto.descricao,
           foto.foto.id,
           arvoreId
         );
       }
-      const aproveitamentoInsert = await database.runAsync(
+      const aproveitamentoInsert = database.runSync(
         "INSERT INTO aproveitamento (descricao, arvore_id) VALUES (?, ?)",
         data.aproveitamento.descricao,
         arvoreId
       );
       const aproveitamentoId = aproveitamentoInsert.lastInsertRowId;
 
-      await database.runAsync(
+      database.runSync(
         "INSERT INTO alimentacao (dados_nutricionais, formas_consumo,aproveitamento_id) VALUES (?, ?, ?)",
         data.aproveitamento.alimentacao.dadosNutricionais,
         data.aproveitamento.alimentacao.formasConsumo,
         aproveitamentoId
       );
 
-      await database.runAsync(
+      database.runSync(
         "INSERT INTO biotecnologia (composicao, potencia_bioprodutos,aproveitamento_id) VALUES (?, ?, ?)",
         data.aproveitamento.biotecnologia.composicao,
         data.aproveitamento.biotecnologia.potenciaBioprodutos,
         aproveitamentoId
       );
-      await database.runAsync(
+      database.runSync(
         "INSERT INTO bioatividade (descricao, aproveitamento_id) VALUES (?, ?)",
         data.aproveitamento.bioatividade.descricao,
         aproveitamentoId
       );
-      const cultivoInsert = await database.runAsync(
+      const cultivoInsert = database.runSync(
         "INSERT INTO cultivo (descricao, arvore_id) VALUES (?, ?)",
         data.cultivo.descricao,
         arvoreId
@@ -95,7 +95,7 @@ export function useDatabase() {
 
       for (let i = 0; i < data.cultivo.cuidadosEspeciais.length; i++) {
         const cuidado = data.cultivo.cuidadosEspeciais[i];
-        await database.runAsync(
+        database.runSync(
           "INSERT INTO cuidados_especiais (tipo_cuidado, descricao, cultivo_id) VALUES (?, ?, ?)",
           cuidado.tipoCuidado,
           cuidado.descricao,
@@ -129,9 +129,11 @@ export function useDatabase() {
     }
   }
 
-  async function deleteAll() {
+  function deleteAll() {
     try {
-      const result = await database.runAsync("DELETE FROM arvore");
+      const result = database.runSync("DELETE FROM arvore");
+      console.log(result);
+      console.log(result);
       return result;
     } catch (error) {
       throw error;

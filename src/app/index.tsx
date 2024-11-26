@@ -1,7 +1,7 @@
 import ArvoreButton from "@/components/ArvoreButton";
 import useArvore from "@/hooks/useArvore";
 import { ArvoreDataBase } from "@/types/arvore.types";
-import { useCallback, useEffect, useState } from "react";
+import { StrictMode, useCallback, useEffect, useState } from "react";
 import {
   FlatList,
   View,
@@ -16,9 +16,12 @@ export default function Home() {
   const { atualizarArvores } = useArvore();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const onRefresh = useCallback(() => {
+    setIsLoading(true);
     setRefreshing(true);
+    listarArvores();
     setTimeout(() => {
       setRefreshing(false);
+      setIsLoading(false);
     }, 1000);
   }, []);
 
@@ -38,7 +41,7 @@ export default function Home() {
   useEffect(() => {
     listarArvores();
     setIsLoading(false);
-  }, [refreshing]);
+  }, []);
 
   return (
     <View className="h-full w-full px-2 bg-verde-claro">
