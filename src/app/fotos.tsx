@@ -51,7 +51,10 @@ export default function Fotos() {
         <FlatList
           data={listaId}
           keyExtractor={({ id }) => id.toString()}
-          renderItem={({ item }) => <FotosView id={item.foto_id} />}
+          renderItem={({ item }) => (
+            <FotosView id={item.foto_id} descricao={item.descricao} />
+          )}
+          contentContainerStyle={{ gap: 6 }}
         />
       </View>
     </View>
